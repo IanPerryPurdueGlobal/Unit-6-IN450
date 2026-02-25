@@ -22,14 +22,18 @@ class Customer(t.Thread):
 
         # try on items
         total_time = 0
-        for item in range(self.num_of_items):
+        for i in range(self.num_of_items):
             try_time = randint(1, 3) * 60
             sleep(try_time / 60)
             total_time += try_time
 
         #store results
         self.wait_time = wait_time
-        self.usage_time = total_time
+        self.usage_time = (total_time /60)
 
-
-
+        self.dressing_rooms.recordMetrics('wait_time', self.wait_time)
+        self.dressing_rooms.recordMetrics('usage_time', self.usage_time)
+        self.dressing_rooms.recordCustomerData(self.customer_id, metric_type =' wait_time', metric = (self.wait_time))
+        self.dressing_rooms.recordCustomerData(self.customer_id, metric_type =' usage_time', metric = (self.usage_time))
+        self.dressing_rooms.recordCustomerData(self.customer_id, metric_type =' items', metric = self.num_of_items)
+        self.dressing_rooms.releaseRoom()
